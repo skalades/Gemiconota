@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, ShoppingBag, Plus, Minus, Check } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -26,7 +26,13 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
+  const totalCartItems = useCartStore((state) => state.totalItems());
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const sizes = product.sizes ? product.sizes.split(",") : [];
   const [selectedSize, setSelectedSize] = useState(sizes[0] || "");
@@ -69,7 +75,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="w-full h-full"
+                  className="w-full h-full relative"
                 >
                   <Image 
                     src={product.images[selectedImage]?.url || "/placeholder-product.png"} 
@@ -94,11 +100,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`w-24 aspect-[4/5] rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                    className={`w-24 aspect-[4/5] rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 relative ${
                       selectedImage === idx ? "border-slate-900 shadow-lg" : "border-transparent opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <Image src={img.url} alt={`${product.name} ${idx}`} width={100} height={125} className="w-full h-full object-cover" />
+                    <Image src={img.url} alt={`${product.name} ${idx}`} fill className="object-cover" />
                   </button>
                 ))}
               </div>
@@ -207,25 +213,23 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
       </div>
 
       {/* Floating Cart Button */}
-      <AnimatePresence>
-        {useCartStore.getState().totalItems() > 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="fixed bottom-8 right-8 z-50"
+      {mounted && totalCartItems > 0 && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          className="fixed bottom-8 right-8 z-50"
+        >
+          <Link 
+            href="/#store"
+            className="w-16 h-16 bg-slate-900 text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-black transition-all group relative"
           >
-            <Link 
-              href="/#store"
-              className="w-16 h-16 bg-slate-900 text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-black transition-all group relative"
-            >
-              <ShoppingBag size={24} />
-              <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-4 border-slate-50">
-                {useCartStore.getState().totalItems()}
-              </span>
-            </Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <ShoppingBag size={24} />
+            <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-4 border-slate-50">
+              {totalCartItems}
+            </span>
+          </Link>
+        </motion.div>
+      )}
     </div>
   );
 }

@@ -17,5 +17,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     notFound();
   }
 
-  return <ProductDetailClient product={product as any} />;
+  // Serialize Decimal objects to numbers for RSC -> Client boundary
+  const serializedProduct = {
+    ...product,
+    buyPrice: Number(product.buyPrice),
+    sellPrice: Number(product.sellPrice),
+  };
+
+  return <ProductDetailClient product={serializedProduct as any} />;
 }
