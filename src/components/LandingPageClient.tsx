@@ -208,7 +208,7 @@ export default function LandingPageClient({ stats, products, companies, settings
               <div key={item.id} className="flex gap-6 items-center">
                 <div className="w-20 h-24 bg-paper rounded-2xl relative overflow-hidden flex-shrink-0">
                   <Image 
-                    src={item.imageUrl || 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=200&q=80'} 
+                    src={item.imageUrl || '/images/placeholder.png'} 
                     alt={item.name} 
                     fill 
                     className="object-cover" 
@@ -277,7 +277,7 @@ const Hero = ({ companies, settings }: { companies: string[], settings: Record<s
     }
   } catch(e) {}
   if (images.length === 0) {
-    images = ["https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"];
+    images = ['/images/placeholder.png'];
   }
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -551,7 +551,7 @@ const MerchStore = ({ products, onAddToCart }: { products: Product[], onAddToCar
                 <ImageCarousel 
                   images={product.images && product.images.length > 0 
                     ? product.images 
-                    : ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80']} 
+                    : ['/images/placeholder.png']} 
                   aspectRatio="aspect-full h-full"
                 />
                 <div className="absolute top-6 right-6 glass-pill px-4 py-2 text-[10px] font-black uppercase tracking-widest z-20">

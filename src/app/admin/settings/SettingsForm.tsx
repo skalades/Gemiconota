@@ -18,7 +18,7 @@ export default function SettingsForm({ settingsMap }: SettingsFormProps) {
     } else if (settingsMap["hero_image"]) {
       savedHeroImages = [settingsMap["hero_image"]];
     } else {
-      savedHeroImages = ["https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80"];
+      savedHeroImages = ["/images/placeholder.png"];
     }
   } catch (e) {
     savedHeroImages = [];
