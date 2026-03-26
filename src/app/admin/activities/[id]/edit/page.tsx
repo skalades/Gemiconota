@@ -33,7 +33,7 @@ export default async function EditActivityPage({ params }: { params: { id: strin
         <form action={async (formData) => {
           "use server"
           await updateActivity(activity.id, formData);
-        }} className="space-y-6">
+        }} encType="multipart/form-data" className="space-y-6">
           <input type="hidden" name="existingImageUrl" value={activity.imageUrl || ""} />
 
           <div>

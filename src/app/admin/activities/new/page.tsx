@@ -18,7 +18,7 @@ export default function NewActivityPage() {
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
-        <form action={createActivity} className="space-y-6">
+        <form action={createActivity} encType="multipart/form-data" className="space-y-6">
           <div>
             <label className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">
               <Type size={14} /> Title
