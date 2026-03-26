@@ -28,7 +28,7 @@ export default function EditProductForm({ product }: { product: Product }) {
   const updateProductWithId = updateProduct.bind(null, product.id);
 
   return (
-    <form action={updateProductWithId} encType="multipart/form-data" className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <form action={updateProductWithId} className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
       <div className="space-y-6">
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Product Name</label>

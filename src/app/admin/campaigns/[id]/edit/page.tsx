@@ -44,7 +44,7 @@ export default async function EditCampaignPage({ params }: { params: Promise<{ i
       </div>
 
       <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden">
-        <form action={updateCampaignWithId} encType="multipart/form-data" className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <form action={updateCampaignWithId} className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Campaign Title</label>

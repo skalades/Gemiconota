@@ -47,7 +47,7 @@ export default function SettingsForm({ settingsMap }: SettingsFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} encType="multipart/form-data">
+    <form onSubmit={handleSubmit}>
       {/* HERO SECTION */}
       <div className="mb-10">
         <h3 className="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-100 pb-2">Hero Section</h3>
