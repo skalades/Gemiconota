@@ -1,0 +1,18 @@
+act_desc: Update dan agenda terbaru dari komunitas alumni GEMICONOTA.
+act_title1: KEGIATAN
+act_title2: ALUMNI
+footer_address1: Jl. Suherman No.90
+footer_address2: Garut, Indonesia
+footer_email: hello@gemiconota.com
+footer_title: HELLO
+gal_desc: Momen kebersamaan yang tak terlupakan.
+gal_title1: GALERI
+gal_title2: KITA
+hero_desc: Platform modern untuk alumni SMKN 2 Garut. Menyatukan visi, membangun sinergi, dan merayakan pencapaian kolektif.
+hero_images: ["/uploads/hero/1774559785848-IMG_3692-(1).JPG","/uploads/hero/1774559868473-IMG_3724.JPG"]
+hero_title1: KONEKSI
+hero_title2: GLOBAL
+hero_title3: LOKAL
+map_desc: Jelajahi jaringan alumni kami yang dinamis. Dari Garut untuk dunia.
+map_title1: PETA
+map_title2: SINERGI
