@@ -542,10 +542,9 @@ const MerchStore = ({ products, onAddToCart }: { products: Product[], onAddToCar
 
         <div className="grid md:grid-cols-3 gap-12">
           {products.map((product, idx) => (
-            <motion.div 
+            <Link 
               key={product.id}
-              initial={{ opacity: 1, y: 0 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              href={`/store/products/${product.id}`}
               className="group cursor-pointer"
             >
               <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden mb-8 bg-paper group">
@@ -567,13 +566,16 @@ const MerchStore = ({ products, onAddToCart }: { products: Product[], onAddToCar
                   </p>
                 </div>
                 <button 
-                  onClick={() => onAddToCart(product)}
-                  className="w-12 h-12 rounded-full border border-ink/10 flex items-center justify-center hover:bg-ink hover:text-white transition-all transform active:scale-95"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onAddToCart(product);
+                  }}
+                  className="w-12 h-12 rounded-full border border-ink/10 flex items-center justify-center hover:bg-ink hover:text-white transition-all transform active:scale-95 z-30 relative"
                 >
                   <ShoppingBag size={20} />
                 </button>
               </div>
-            </motion.div>
+            </Link>
           ))}
         </div>
       </div>

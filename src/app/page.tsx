@@ -42,6 +42,8 @@ export default async function Home() {
     price: Number(p.sellPrice), // Map sellPrice to component's price
     badge: p.stockType,
     category: p.category,
+    description: p.description,
+    sizes: p.sizes ? p.sizes.split(',') : [],
     imageUrl: p.images?.[0]?.url || p.imageUrl,
     images: p.images?.map((img: any) => img.url) || []
   }));
