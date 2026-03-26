@@ -1,0 +1,217 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model account {
+  id                String  @id
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              user    @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Account_userId_fkey")
+
+  @@unique([provider, providerAccountId], map: "Account_provider_providerAccountId_key")
+  @@index([userId], map: "Account_userId_fkey")
+}
+
+model campaign {
+  id            String          @id @default(cuid())
+  title         String
+  description   String?         @db.Text
+  targetAmount  Decimal         @db.Decimal(15, 2)
+  currentAmount Decimal         @default(0.00) @db.Decimal(15, 2)
+  endDate       DateTime?
+  imageUrl      String?
+  createdAt     DateTime        @default(now())
+  images        campaignimage[]
+  donation      donation[]
+}
+
+model campaignimage {
+  id         String   @id @default(cuid())
+  url        String
+  campaignId String
+  position   Int      @default(0)
+  campaign   campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade, map: "CampaignImage_campaignId_fkey")
+
+  @@index([campaignId], map: "CampaignImage_campaignId_fkey")
+}
+
+model donation {
+  id         String   @id
+  campaignId String
+  name       String   @default("Anonim")
+  amount     Decimal  @db.Decimal(15, 2)
+  message    String?  @db.Text
+  createdAt  DateTime @default(now())
+  campaign   campaign @relation(fields: [campaignId], references: [id], map: "Donation_campaignId_fkey")
+
+  @@index([campaignId], map: "Donation_campaignId_fkey")
+}
+
+model order {
+  id              String               @id
+  userId          String
+  totalAmount     Decimal              @db.Decimal(12, 2)
+  paymentStatus   order_paymentStatus  @default(PENDING)
+  shippingStatus  order_shippingStatus @default(PENDING)
+  paymentToken    String?
+  shippingAddress String?              @db.Text
+  whatsappContact String?
+  notes           String?              @db.Text
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  user            user                 @relation(fields: [userId], references: [id], map: "Order_userId_fkey")
+  orderitem       orderitem[]
+
+  @@index([userId], map: "Order_userId_fkey")
+}
+
+model orderitem {
+  id        String  @id
+  orderId   String
+  productId String
+  quantity  Int
+  price     Decimal @db.Decimal(12, 2)
+  order     order   @relation(fields: [orderId], references: [id], map: "OrderItem_orderId_fkey")
+  product   product @relation(fields: [productId], references: [id], map: "OrderItem_productId_fkey")
+
+  @@index([orderId], map: "OrderItem_orderId_fkey")
+  @@index([productId], map: "OrderItem_productId_fkey")
+}
+
+model product {
+  id               String            @id @default(cuid())
+  name             String
+  description      String?           @db.Text
+  stockType        product_stockType @default(READY)
+  stockCount       Int               @default(0)
+  imageUrl         String?
+  estimatedArrival String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  category         String?
+  sizes            String?
+  buyPrice         Decimal           @default(0.00) @db.Decimal(12, 2)
+  sellPrice        Decimal           @default(0.00) @db.Decimal(12, 2)
+  orderItems       orderitem[]
+  images           productimage[]
+}
+
+model productimage {
+  id        String  @id @default(cuid())
+  url       String
+  productId String
+  position  Int     @default(0)
+  product   product @relation(fields: [productId], references: [id], onDelete: Cascade, map: "ProductImage_productId_fkey")
+
+  @@index([productId], map: "ProductImage_productId_fkey")
+}
+
+model profile {
+  id             String   @id
+  userId         String   @unique(map: "Profile_userId_key")
+  graduationYear Int
+  currentCompany String?
+  jobTitle       String?
+  miningSector   String?
+  locationLat    Float?
+  locationLng    Float?
+  whatsappNumber String?
+  isPublic       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           user     @relation(fields: [userId], references: [id], map: "Profile_userId_fkey")
+}
+
+model session {
+  id           String   @id
+  sessionToken String   @unique(map: "Session_sessionToken_key")
+  userId       String
+  expires      DateTime
+  user         user     @relation(fields: [userId], references: [id], onDelete: Cascade, map: "Session_userId_fkey")
+
+  @@index([userId], map: "Session_userId_fkey")
+}
+
+model user {
+  id            String    @id
+  name          String?
+  email         String?   @unique(map: "User_email_key")
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          user_role @default(USER)
+  account       account[]
+  order         order[]
+  profile       profile?
+  session       session[]
+}
+
+model verificationtoken {
+  identifier String
+  token      String   @unique(map: "VerificationToken_token_key")
+  expires    DateTime
+
+  @@unique([identifier, token], map: "VerificationToken_identifier_token_key")
+}
+
+enum order_paymentStatus {
+  PENDING
+  PAID
+  FAILED
+  EXPIRED
+}
+
+enum product_stockType {
+  READY
+  PREORDER
+}
+
+enum order_shippingStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+}
+
+enum user_role {
+  USER
+  ADMIN
+}
+
+model setting {
+  key         String   @id
+  value       String   @db.Text
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model activity {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  date        DateTime
+  location    String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model gallery {
+  id          String   @id @default(cuid())
+  imageUrl    String
+  caption     String?
+  createdAt   DateTime @default(now())
+}
