@@ -1,3 +1,5 @@
+"use client";
+
 import { createCampaign } from "../../products/actions";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";

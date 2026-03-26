@@ -1,3 +1,5 @@
+"use client";
+
 import { createActivity } from "../actions";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Image as ImageIcon, MapPin, Type, AlignLeft } from "lucide-react";

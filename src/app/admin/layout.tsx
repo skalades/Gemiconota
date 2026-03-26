@@ -25,7 +25,6 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <SidebarLink href="/admin" icon={<LayoutDashboard size={18} />} label="Overview" active={pathname === "/admin"} />
           <SidebarLink href="/admin/products" icon={<ShoppingBag size={18} />} label="Products" active={pathname.startsWith("/admin/products")} />
           <SidebarLink href="/admin/campaigns" icon={<Heart size={18} />} label="Campaigns" active={pathname.startsWith("/admin/campaigns")} />
-          <SidebarLink href="/admin/alumni" icon={<Users size={18} />} label="Alumni" active={pathname.startsWith("/admin/alumni")} />
           <SidebarLink href="/admin/activities" icon={<Calendar size={18} />} label="Activities" active={pathname.startsWith("/admin/activities")} />
           <SidebarLink href="/admin/gallery" icon={<ImageIcon size={18} />} label="Gallery" active={pathname.startsWith("/admin/gallery")} />
           <SidebarLink href="/admin/settings" icon={<Settings size={18} />} label="Settings" active={pathname.startsWith("/admin/settings")} />

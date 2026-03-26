@@ -2,6 +2,8 @@
 
 import { updateSettings } from "./actions";
 import ImageUpload from "@/components/admin/ImageUpload";
+import { useTransition, useState } from "react";
+import { Save, CheckCircle2 } from "lucide-react";
 
 interface SettingsFormProps {
   settingsMap: Record<string, string>;
@@ -24,8 +26,28 @@ export default function SettingsForm({ settingsMap }: SettingsFormProps) {
 
   const getDef = (key: string, def: string) => settingsMap[key] || def;
 
+  const [isPending, startTransition] = useTransition();
+  const [successMode, setSuccessMode] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    setSuccessMode(false);
+    
+    startTransition(async () => {
+      try {
+        await updateSettings(formData);
+        setSuccessMode(true);
+        setTimeout(() => setSuccessMode(false), 4000);
+      } catch (err) {
+        console.error("Save failed", err);
+        alert("Failed to save settings. Please try again.");
+      }
+    });
+  };
+
   return (
-    <form action={updateSettings} encType="multipart/form-data">
+    <form onSubmit={handleSubmit} encType="multipart/form-data">
       {/* HERO SECTION */}
       <div className="mb-10">
         <h3 className="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 border-b border-slate-100 pb-2">Hero Section</h3>
@@ -150,9 +172,28 @@ export default function SettingsForm({ settingsMap }: SettingsFormProps) {
         </div>
       </div>
 
-      <div className="pt-6 border-t border-slate-100">
-        <button type="submit" className="bg-slate-900 text-white px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all">
-          Save All Settings
+      <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
+        {successMode ? (
+          <div className="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-4 py-3 rounded-xl border border-emerald-100 font-bold text-xs uppercase tracking-widest animate-in fade-in zoom-in duration-300">
+            <CheckCircle2 size={16} /> 
+            Settings Saved Successfully!
+          </div>
+        ) : (
+          <div /> // empty flex spacer
+        )}
+        <button 
+          type="submit" 
+          disabled={isPending}
+          className="bg-slate-900 text-white px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 focus:ring-4 focus:ring-slate-200 transition-all disabled:opacity-50 flex items-center gap-2"
+        >
+          {isPending ? (
+            <span className="animate-pulse">Saving...</span>
+          ) : (
+            <>
+              <Save size={16} />
+              Save All Settings
+            </>
+          )}
         </button>
       </div>
 
